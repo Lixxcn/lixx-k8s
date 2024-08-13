@@ -1,0 +1,43 @@
+apiVersion: raven.openyurt.io/v1beta1
+kind: Gateway
+metadata:
+  name: gw-cloud
+spec:
+  exposeType: PublicIP
+  proxyConfig:
+    Replicas: 1
+    proxyHTTPPort: 10255,9445
+    proxyHTTPSPort: 10250,9100
+  tunnelConfig:
+    Replicas: 1
+  endpoints:
+    - nodeName: k8s-lixx-master-cloud001
+      underNAT: false
+      port: 10262
+      type: proxy
+      publicIP: 101.126.5.77
+    - nodeName: k8s-lixx-master-cloud001
+      underNAT: false
+      port: 4500
+      type: tunnel
+      publicIP: 101.126.5.77
+
+---
+apiVersion: raven.openyurt.io/v1beta1
+kind: Gateway
+metadata:
+  name: gw-edge
+spec:
+  proxyConfig:
+    Replicas: 1
+  tunnelConfig:
+    Replicas: 1
+  endpoints:
+  - nodeName: k8s-lixx-cloud-worknode-01
+    underNAT: true
+    port: 10262
+    type: proxy
+  - nodeName: k8s-lixx-cloud-worknode-01
+    underNAT: true
+    port: 4500
+    type: tunnel

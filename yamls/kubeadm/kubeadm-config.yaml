@@ -1,0 +1,16 @@
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: v1.30.3
+controlPlaneEndpoint: k8s-lixx-master-cloud001:6443
+imageRepository: registry.aliyuncs.com/google_containers
+apiServer:
+ certSANs:
+ - 192.168.0.2
+ - 192.168.8.51
+networking:
+ podSubnet: 10.244.0.0/16
+ serviceSubnet: 10.10.0.0/16
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: ipvs
