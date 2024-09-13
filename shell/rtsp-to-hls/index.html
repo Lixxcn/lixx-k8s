@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时摄像头画面</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        /* 设置网页全屏布局 */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 容器使视频居中显示，且随着窗口大小调整 */
+        #video-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 标题样式 */
+        #title {
+            position: absolute;
+            top: 10px;
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        /* 视频大小适应容器 */
+        video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* 保证视频按比例缩放，内容不变形 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 实时画面标题，居中显示 -->
+    <div id="title">实时摄像头画面</div>
+
+    <!-- 视频容器，使视频窗口大小自适应浏览器大小 -->
+    <div id="video-container">
+        <video id="video" controls autoplay></video>
+    </div>
+
+    <script>
+        // 初始化 HLS 播放
+        if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls();
+            hls.loadSource('/hls/output.m3u8');  // 替换为你的HLS文件路径
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        }
+        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = '/hls/output.m3u8';  // 替换为你的HLS文件路径
+            video.addEventListener('loadedmetadata', function () {
+                video.play();
+            });
+        }
+    </script>
+
+</body>
+
+</html>
