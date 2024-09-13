@@ -23,11 +23,11 @@ spec:
         spec:
           domain:
             cpu:
-              sockets: 2
+              sockets: 1
               cores: 1
               threads: 1
             memory:
-              guest: "4Gi"
+              guest: "2Gi"
             clock:
               timezone: "Asia/Shanghai"
               timer:
@@ -43,8 +43,11 @@ spec:
                 name: attachnet1
             resources:
               requests:
-                cpu: 2
-                memory: 4Gi
+                cpu: 0.25
+                memory: 0.5Gi
+              limits:
+                cpu: 1
+                memory: 2Gi
           dnsPolicy: "None"
           dnsConfig:
             nameservers:
