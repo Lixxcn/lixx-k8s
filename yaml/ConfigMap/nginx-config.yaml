@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: default
+data:
+  nginx.conf: |
+    stream {
+        upstream backend_tcp_6443 {
+            server 172.10.20.20:6443;
+        }
+        server {
+            listen 6443;
+            proxy_pass backend_tcp_6443;
+        }
+
+        upstream backend_tcp_18443 {
+            server 172.10.20.20:18443;
+        }
+        server {
+            listen 18443;
+            proxy_pass backend_tcp_18443;
+        }
+
+        upstream backend_tcp_38443 {
+            server 172.10.20.20:38443;
+        }
+        server {
+            listen 38443;
+            proxy_pass backend_tcp_38443;
+        }
+
+        upstream backend_udp_4500 {
+            server 172.10.20.20:4500;
+        }
+        server {
+            listen 4500 udp;
+            proxy_pass backend_udp_4500;
+        }
+
+        upstream backend_udp_123 {
+            server 172.10.20.20:123;
+        }
+        server {
+            listen 123 udp;
+            proxy_pass backend_udp_123;
+        }
+    }
