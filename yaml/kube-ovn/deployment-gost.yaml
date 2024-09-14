@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-gost
+  namespace: openyurt
+  labels:
+    app: gost
+spec:
+  selector:
+    matchLabels:
+      app: gost
+  replicas: 3
+  template:
+    metadata:
+      #annotations:
+        #ovn.kubernetes.io/logical_switch: subnet-openyurt
+        #k8s.v1.cni.cncf.io/networks: mec-nets/attachnet1
+        # attachnet1.mec-nets.ovn.kubernetes.io/logical_switch: ovn-default
+        # attachnet1.mec-nets.ovn.kubernetes.io/ip_address: 192.168.101.7
+      labels:
+        app: gost
+    spec:
+      containers:
+      - name: gost
+        image: registry-1.ict-mec.net:18443/ginuerzh/gost:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - sh
+        - -c
+        - "gost  -L=tcp://:6443/10.185.0.4:6443 -L=udp://:4500/10.185.0.4:4500 -L=tcp://:18443/10.185.0.4:18443 -L=udp://:123/10.185.0.4:123"
+        securityContext:
+          privileged: true

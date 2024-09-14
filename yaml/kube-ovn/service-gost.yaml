@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-gost
+  namespace: openyurt
+spec:
+  selector:
+    app: gost
+  sessionAffinity: ClientIP
+  ports:
+    - protocol: TCP
+      name: api
+      port: 6443
+      targetPort: 6443
+    - protocol: UDP
+      name: vpn
+      port: 4500
+      targetPort: 4500
+    - protocol: TCP
+      port: 18443
+      name: registry
+      targetPort: 18443
+    - protocol: UDP
+      name: chrony
+      port: 123
+      targetPort: 123

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-gost
+  namespace: openyurt
+  annotations:
+    ovn.kubernetes.io/logical_switch: ovn-default
+    ovn.kubernetes.io/ip_address: 172.10.100.100
+spec:
+  containers:
+  - name: gost
+    image: registry-1.ict-mec.net:18443/ginuerzh/gost:latest
+    imagePullPolicy: IfNotPresent
+    command:
+    - sh
+    - -c
+    - "gost  -L=tcp://:6443/10.233.46.62:6443 -L=udp://:4500/10.233.46.62:4500 -L=tcp://:18443/10.233.46.62:18443 -L=udp://:123/10.233.46.62:123"
+    securityContext:
+      privileged: true
