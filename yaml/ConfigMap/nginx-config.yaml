@@ -2,12 +2,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
-  namespace: default
+  namespace: openyurt
 data:
   nginx.conf: |
+    worker_processes auto;
+
+    # 必须的 events 配置
+    events {
+        worker_connections 1024;
+    }
+
     stream {
         upstream backend_tcp_6443 {
-            server 172.10.20.20:6443;
+            server 10.185.0.4:6443;
         }
         server {
             listen 6443;
@@ -15,7 +22,7 @@ data:
         }
 
         upstream backend_tcp_18443 {
-            server 172.10.20.20:18443;
+            server 10.185.0.4:18443;
         }
         server {
             listen 18443;
@@ -23,7 +30,7 @@ data:
         }
 
         upstream backend_tcp_38443 {
-            server 172.10.20.20:38443;
+            server 10.185.0.4:38443;
         }
         server {
             listen 38443;
@@ -31,7 +38,7 @@ data:
         }
 
         upstream backend_udp_4500 {
-            server 172.10.20.20:4500;
+            server 10.185.0.4:4500;
         }
         server {
             listen 4500 udp;
@@ -39,7 +46,7 @@ data:
         }
 
         upstream backend_udp_123 {
-            server 172.10.20.20:123;
+            server 10.185.0.4:123;
         }
         server {
             listen 123 udp;

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-proxy
+  namespace: openyurt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy
+      annotations:
+        ovn.kubernetes.io/logical_switch: ovn-default
+        ovn.kubernetes.io/ip_address: 172.10.10.10
+    spec:
+      containers:
+      - name: nginx
+        image: registry-1.ict-mec.net:18443/library/nginx
+        ports:
+        - containerPort: 6443
+          protocol: TCP
+        - containerPort: 18443
+          protocol: TCP
+        - containerPort: 38443
+          protocol: TCP
+        - containerPort: 4500
+          protocol: UDP
+        - containerPort: 123
+          protocol: UDP
+        volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
