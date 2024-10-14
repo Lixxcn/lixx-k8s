@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lixx
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemonset
+  namespace: lixx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: registry-1.ict-mec.net:18443/library/nginx
+      tolerations:
+      - key: "node.openyurt.io/role"
+        operator: "Equal"
+        value: "edge"
+        effect: "NoSchedule"

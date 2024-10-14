@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# 定义要创建的虚拟机数量
+NUM_START=301
+NUM_END=400
+
 template=$(cat <<EOF
 apiVersion: mececs.io/v1beta1
 kind: EnhancedVirtualMachine
@@ -43,7 +49,7 @@ spec:
                 name: attachnet1
             resources:
               requests:
-                cpu: 0.25
+                cpu: 250m
                 memory: 0.5Gi
               limits:
                 cpu: 1
@@ -79,11 +85,11 @@ spec:
 EOF
 )
 
-# 生成并应用 100 个虚拟机
-for i in $(seq -f "%04g" 1 100); do
+# 生成并应用虚拟机
+for i in $(seq -f "%04g" $NUM_START  $NUM_END); do
   vm_name="openyurt-edge-${i}"
   yaml_content=$(echo "$template" | sed "s/openyurt-edge-0001/$vm_name/g")
   echo "$yaml_content" | kubectl apply -f -
 done
 
-echo "100 个 EnhancedVirtualMachine 已经创建并应用到 Kubernetes 集群中。"
+echo " $((NUM_END - NUM_START + 1)) 个 EnhancedVirtualMachine 已经创建并应用到 Kubernetes 集群中。"

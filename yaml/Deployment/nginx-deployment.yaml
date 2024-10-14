@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: lixx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: registry-1.ict-mec.net:18443/library/nginx
+      tolerations:
+      - key: "node.openyurt.io/role"
+        operator: "Equal"
+        value: "edge"
+        effect: "NoSchedule"
